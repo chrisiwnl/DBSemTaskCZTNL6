@@ -1,0 +1,50 @@
+CREATE TABLE IGAZGATO(
+	IgazgatoID int(5) PRIMARY KEY,
+	Nev char(20),
+	SzulDatum int(10),
+	Iranyitoszam int(5),
+	Varos char(10),
+	Utca char(30),
+    Hazszam int(2)
+);
+CREATE TABLE KORHAZ(
+	KorhazID int(5) PRIMARY KEY,
+	KorhazNev char(30),
+	Iranyitoszam int(4),
+	Varos char(10),
+	Utca char(30),
+    Hazszam int(2),
+	IgazgatoID int(5),
+    FOREIGN KEY(IgazgatoID) REFERENCES IGAZGATO(IgazgatoID)
+);
+
+CREATE TABLE OSZTALY(
+	OsztalyID int(5) PRIMARY KEY,
+	OsztalyNev char(20),
+	KorhazID int(5),FOREIGN KEY(KorhazID) REFERENCES KORHAZ(KorhazID)
+);
+
+CREATE TABLE ORVOS(
+	OrvosID int(5) PRIMARY KEY,
+	OrvosNev char(20),
+	SzulDatum int(10),
+	OsztalyID int (5) , FOREIGN KEY (OsztalyID) REFERENCES OSZTALY(OsztalyID)
+);
+
+CREATE TABLE NOVER(
+	NoverID int(5) PRIMARY KEY,
+	NoverNev char(20),
+	OsztalyID int(5), FOREIGN KEY (OsztalyID) REFERENCES OSZTALY(OsztalyID)
+);
+
+CREATE TABLE BETEG(
+	BetegID int(5) PRIMARY KEY,
+	BetegNev char(20),
+    BetegNEM char(1),
+	SzulDatum int(10),
+    Betegseg char(20),
+	OrvosID int(5),FOREIGN KEY (OrvosID) REFERENCES ORVOS(OrvosID));
+
+CREATE TABLE APOLO(
+	BetegID int(5),FOREIGN KEY (BetegID) REFERENCES BETEG(BetegID),
+	NoverID int(5),FOREIGN KEY(NoverID) REFERENCES NOVER(NoverID));

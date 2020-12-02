@@ -1,0 +1,32 @@
+Sebészetre beosztott nővérek a semmelweis kórházban: 
+
+SELECT NoverNev,KorhazNev FROM NOVER, OSZTALY, KORHAZ WHERE NOVER.OsztalyID = OSZTALY.OsztalyID AND KORHAZ.KorhazID = osztaly.KorhazID AND  OSZTALY.OsztalyNev = "Sebészet" AND KORHAZ.Iranyitoszam = 3529
+
+Rendezzük az orvosokat betegszám alapján:
+
+SELECT * FROM (SELECT COUNT(BETEG.OrvosID) CNT,OrvosNev FROM ORVOS,BETEG WHERE ORVOS.OrvosID = BETEG.OrvosID 
+GROUP BY (BETEG.OrvosID)
+ORDER BY COUNT(BETEG.OrvosID)desc) ADAT
+
+Az összes női beteg:
+SELECT BetegNev FROM BETEG WHERE BETEG.BetegNEM LIKE "F"
+
+Az összes fül-orr-gége beteg:
+SELECT BetegNev FROM BETEG WHERE BETEG.Betegseg LIKE "Fül-Orr-Gége"
+
+Az összes női belgyógyászati  beteg sebészetre való átrakása:
+
+SELECT * FROM BETEG;
+UPDATE BETEG SET BETEG.Betegseg = "Sebészet" WHERE BETEG.BetegNEM = "F" AND BETEG.Betegseg = "Belgyógyászat";
+SELECT * FROM BETEG;
+
+Melyik beteget melyik nővér ápolja majd rendezve lett nővér alapján:
+
+SELECT BetegNev,NoverNev FROM BETEG,NOVER,APOLO
+WHERE BETEG.BetegID = APOLO.BetegID AND NOVER.NoverID = APOLO.NoverID
+ORDER BY NoverNev
+
+Melyik beteghez nem tartozik ápoló: 
+
+SELECT BETEGNEV FROM BETEG
+WHERE BETEGID NOT IN (SELECT BETEGID FROM APOLO)
